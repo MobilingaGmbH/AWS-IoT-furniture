@@ -1,0 +1,45 @@
+<!-- Fixed navbar -->
+<nav ng-controller="NavbarController as ctl" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/app.html">{{t('title')}}</a>
+      <div class="navbar-brand lang">
+        <a id="lang_en" href="javascript:setLang('en')">EN</a> | <a id="lang_de" href="javascript:setLang('de')">DE</a>
+      </div>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li ng-if="isAuthenticated()" ui-sref-active="active"><a ui-sref="auth.profile">{{t('profile')}}</a></li>
+        <li ng-if="isAuthenticated()" ui-sref-active="active"><a ui-sref="auth.device">{{t('my_device')}}</a></li>
+      </ul>
+      <ul ng-if="!isAuthenticated()" class="nav navbar-nav navbar-right">
+        <li ui-sref-active="active"><a ui-sref="public.login">{{t('login')}}</a></li>
+        <li ui-sref-active="active"><a ui-sref="public.signup">{{t('signup')}}</a></li>
+      </ul>
+      <ul ng-if="isAuthenticated()" class="nav navbar-nav navbar-right">
+      <li><a ui-sref="public.logout">{{t('logout')}}</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+<div ui-view></div>
+
+<script language="Javascript">
+  var lang = localStorage.getItem('lang');
+  console.log('current lang: ' + lang);
+
+  if (lang === 'en') {
+    $('#lang_en').addClass('current-lang');
+    $('#lang_de').removeClass('current-lang');
+  } else {
+    $('#lang_en').removeClass('current-lang');
+    $('#lang_de').addClass('current-lang');
+  }
+</script>

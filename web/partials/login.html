@@ -1,0 +1,38 @@
+<div class="center-form panel">
+  <div class="panel-body">
+    <h2 class="text-center">{{t('login')}}</h2>
+    <form method="post" ng-submit="login()" name="loginForm">
+      <div class="form-group has-feedback">
+        <input class="form-control input-lg" type="text" name="email" ng-model="email" placeholder="{{t('email_username')}}" required autofocus>
+        <span class="ion-at form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+        <input class="form-control input-lg" type="password" name="password" ng-model="password" placeholder="{{t('password')}}" required>
+        <span class="ion-key form-control-feedback"></span>
+      </div>
+
+      <button type="submit" ng-disabled="loginForm.$invalid" class="btn btn-lg  btn-block btn-success">{{t('login')}}</button>
+
+      <br/>
+
+      <p class="text-center">
+        <a ui-sref="public.forgot">{{t('forgot_password')}}</a>
+      </p>
+
+      <p class="text-center">
+        <a ui-sref="public.reset">{{t('reset_password')}}</a>
+      </p>
+
+      <p class="text-center text-muted">{{t('no_account')}}</p>
+
+      <p class="text-center">
+        <a ui-sref="public.signup">{{t('signup')}}</a>
+      </p>
+
+      <p class="text-center">
+        <a ui-sref="public.verify">{{t('verify')}}</a>
+      </p>
+    </form>
+  </div><!-- /panel-body -->
+</div><!-- /panel -->

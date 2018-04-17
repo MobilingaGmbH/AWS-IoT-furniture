@@ -1,0 +1,4 @@
+.project
+.serverless
+*.zip
+node_modules

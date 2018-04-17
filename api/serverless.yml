@@ -1,0 +1,195 @@
+service: furniture-iot
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  memorySize: 512
+  timeout: 60
+  stage: prod
+  region: eu-west-1
+  profile: furniture
+  environment:
+    REGION: eu-west-1
+    COGNITO_USER_POOL_ID: eu-west-1_bmoLjG53e
+    COGNITO_CLIENT_ID: 1avi3hir4pkbhkaekcgr1vm65o
+    TABLE_USER: users
+    TABLE_DEVICE: devices
+    TABLE_DEVICE_DATA: raw-data
+    TABLE_DEVICE_DATA_LATEST: latest-data
+    QUERY_LIMIT: 100
+    IOT_ENDPOINT: a1ee2tpd6jd231.iot.eu-west-1.amazonaws.com
+
+functions:
+  simulator:
+    handler: functions/test/simulator.index
+    role: defaultRole
+    events:
+      - schedule: rate(2 minutes)
+  user-login:
+    handler: functions/user/login/login.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/login
+          method: post
+          cors: true
+          authorizer: null
+  user-refresh:
+    handler: functions/user/refresh/refresh.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/refresh
+          method: post
+          cors: true
+          authorizer: null
+  user-signup:
+    handler: functions/user/signup/signup.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/signup
+          method: post
+          cors: true
+          authorizer: null
+  user-verify:
+    handler: functions/user/verify/verify.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/{username}/verify
+          method: get
+          cors: true
+          authorizer: null
+  user-forgot-password:
+    handler: functions/user/password/forgot.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/{username}/forgot-password
+          method: post
+          cors: true
+          authorizer: null
+  user-reset-password:
+    handler: functions/user/password/reset.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/{username}/reset-password
+          method: post
+          cors: true
+          authorizer: null
+  user-me-get:
+    handler: functions/user/get/me.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/me
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  user-me-update:
+    handler: functions/user/update/update.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/me
+          method: put
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  user-me-delete:
+    handler: functions/user/delete/delete.index
+    role: defaultRole
+    events:
+      - http:
+          path: user/me
+          method: delete
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  device-create:
+    handler: functions/device/create/create.index
+    role: defaultRole
+    events:
+      - http:
+          path: device
+          method: post
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  data-get-device:
+    handler: functions/data/get/device.index
+    role: defaultRole
+    events:
+      - http:
+          path: data/device/{deviceId}
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  data-get-device-latest:
+    handler: functions/data/get/device-latest.index
+    role: defaultRole
+    events:
+      - http:
+          path: data/device/{deviceId}/latest
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  data-get-me:
+    handler: functions/data/get/me.index
+    role: defaultRole
+    events:
+      - http:
+          path: data/me
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+  data-get-me-latest:
+    handler: functions/data/get/me-latest.index
+    role: defaultRole
+    events:
+      - http:
+          path: data/me/latest
+          method: get
+          cors: true
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-1:460644481291:userpool/eu-west-1_bmoLjG53e
+
+
+resources:
+  Resources:
+    defaultRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: '/'
+        RoleName: FurnitureIoTLambdaRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: FurnitureIoTLambdaPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: '*'
+                -  Effect: 'Allow'
+                   Action:
+                     - 'cognito-idp:*'
+                     - 'dynamodb:*'
+                     - 'iot:Publish'
+                   Resource: '*'

@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3><i class="fa fa-user"></i> {{ctl.t('my_device')}}</h3></div>
+        <div class="panel-body">
+          <a href ng-click="ctl.getData()"><u>Reload data</u></a>
+          <br/><br/>
+
+          <table ng-table="ctl.tableParams" class="table table-condensed table-bordered table-striped">
+            <tr ng-repeat="item in $data">
+              <td data-title="'Time'">
+                {{item.time}} UTC
+              </td>
+              <td data-title="'Parameter 1'">
+                {{item.roomTemp}}
+              </td>
+              <td data-title="'Parameter 2'">
+                {{item.humidity}}
+              </td>
+              <td data-title="'Parameter 3'">
+                {{item.speed}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div><!-- / column -->
+  </div><!-- /row -->
+</div>
+<!--
+[{"signalStrength":68,"brightness":63,"timestamp":1523497932,"device_id":"382f9e87-9db9-4939-9fac-13513e685549","humidity":44,"time":"2018-04-12 01:52:12","speed":88,"roomTemp":32},
+-->

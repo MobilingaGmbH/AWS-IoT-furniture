@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3><i class="fa fa-user"></i> {{ctl.t('profile')}}</h3></div>
+        <div class="panel-body">
+          <dl>
+          <dt>{{ctl.t('username')}}</dt><dd>{{ctl.user.username}}</dd>
+          <dt>{{ctl.t('email')}}</dt><dd>{{ctl.user.email}}</dd>
+          <dt>{{ctl.t('created_at')}}</dt><dd>{{ctl.user.created_at}}</dd>
+          </dl>
+          <a href ng-show="ctl.user.password && !ctl.passwordOpen" ng-click="ctl.passwordOpen = true">{{ctl.t('change_password')}}</a>
+          <form ng-show="ctl.passwordOpen" ng-submit="ctl.updatePassword()" name="updatePasswordForm">
+            <div class="form-group has-feedback" ng-class="{ 'has-error' : updatePasswordForm.password.$invalid && updatePasswordForm.password.$dirty }">
+              <input password-strength class="form-control input-lg" type="password" name="newPassword" ng-model="ctl.newPassword" placeholder="{{ctl.t('type_new_password')}}" required><br/>
+              <input class="form-control input-lg" type="password" name="password" ng-model="ctl.password" placeholder="{{ctl.t('type_old_password')}}" required>
+              <span class="ion-key form-control-feedback"></span>
+              <div class="help-block text-danger" ng-if="updatePasswordForm.newPassword.$dirty" ng-messages="updatePasswordForm.newPassword.$error">
+                <div ng-message="required">{{ctl.t('password_required')}}</div>
+              </div>
+            </div>
+            <button class="btn btn-success" ng-disabled="updatePasswordForm.$invalid"><i class="fa fa-key fa-fw"></i> {{ctl.t('update_password')}}</button>
+          </form>
+        </div>
+      </div>
+    </div><!-- / column -->
+  </div><!-- /row -->
+</div>

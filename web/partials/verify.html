@@ -1,0 +1,20 @@
+<div class="center-form panel">
+  <div class="panel-body">
+    <h2 class="text-center">{{t('verify_account')}}</h2>
+    <form method="post" ng-submit="verify()" name="verifyForm">
+      <div class="form-group has-feedback" ng-class="{ 'has-error' : verifyForm.username.$invalid && verifyForm.username.$dirty }">
+        <input class="form-control input-lg" type="text" id="username" name="username" ng-model="username" placeholder="{{t('your_username')}}" required>
+        <br/>
+        <input class="form-control input-lg" type="text" id="code" name="code" ng-model="code" placeholder="{{t('verification_code')}}" required>
+
+        <span class="ion-at form-control-feedback"></span>
+        <div class="help-block text-danger" ng-if="verifyForm.username.$dirty" ng-messages="verifyForm.username.$error">
+          <div ng-message="required">{{t('username_code_required')}}</div>
+        </div>
+      </div>
+
+      <button type="submit" ng-disabled="verifyForm.$invalid" class="btn btn-lg btn-block btn-primary">{{t('verify_account')}}</button>
+    </form>
+  </div><!-- /panel-body -->
+</div><!-- /panel -->
+
